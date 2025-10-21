@@ -1,0 +1,347 @@
+% LaTeX rebuttal letter example. 
+% 
+% Copyright 2019 Friedemann Zenke, zenkelab.org
+%
+% Based on examples by Dirk Eddelbuettel, Fran and others from 
+% https://tex.stackexchange.com/questions/2317/latex-style-or-macro-for-detailed-response-to-referee-report
+% 
+% Licensed under cc by-sa 3.0 with attribution required.
+
+\documentclass[11pt]{article}
+\usepackage[authoryear]{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{lipsum} % to generate some filler text
+\usepackage{fullpage}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{soul}
+% import Eq and Section references from the main manuscript where needed
+% \usepackage{xr}
+% \externaldocument{manuscript}
+
+% package needed for optional arguments
+\usepackage{xifthen}
+% define counters for reviewers and their points
+\newcounter{reviewer}
+\setcounter{reviewer}{0}
+\newcounter{point}[reviewer]
+\setcounter{point}{0}
+
+% This refines the format of how the reviewer/point reference will appear.
+\renewcommand{\thepoint}{P\,\thereviewer.\arabic{point}} 
+
+% command declarations for reviewer points and our responses
+\newcommand{\reviewersection}{\stepcounter{reviewer} \bigskip \hrule
+                  \section*{Reviewer \thereviewer}}
+
+\newenvironment{point}
+   {\refstepcounter{point} \bigskip \noindent {\textbf{Reviewer~Point~\thepoint} } ---\ }
+   {\par }
+
+\newcommand{\shortpoint}[1]{\refstepcounter{point}  \bigskip \noindent 
+	{\textbf{Reviewer~Point~\thepoint} } ---~#1\par }
+
+\newenvironment{reply}
+   {\medskip \noindent \begin{sf}\textbf{Authors' Reply}:\  }
+   {\medskip \end{sf}\medskip}
+
+\newcommand{\shortreply}[2][]{\medskip \noindent \begin{sf}\textbf{Reply}:\  #2
+	\ifthenelse{\equal{#1}{}}{}{ \hfill \footnotesize (#1)}%
+	\medskip \end{sf}}
+
+
+\usepackage{xcolor} 
+\newcommand{\edit}[1]{{\color{red}#1}}
+
+\begin{document}
+\setcounter{figure}{0}
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\thefigure}{R\arabic{figure}}
+
+\section*{Response to the reviewers}
+ Manuscript ID: ICARUS-D-25-00191
+
+\begin{reply}
+We thank the reviewers for their helpful and detailed feedback.
+We have revised the paper to address the reviewers' comments.
+Changes to the text are highlighted in the manuscript in red font.
+Significant revisions include the following: 
+\begin{itemize}
+\item We now use von Mises-Fisher (vMF) statistics to calculate the sample mean planes and their uncertainties, but we continue to use circle-fit statistics to calculate the mean planes and mean plane uncertainties for the sets of clones. 
+We add a summary of vMF statistics to our summary of circle-fit statistics. We demonstrate through theory and simulation that vMF statistics are an appropriate choice to describe the mean plane of the observed objects and its uncertainty, and that they are inappropriate for the mean planes of the clones. 
+%We add a short section outlining our high-level interpretation of what the mean-plane uncertainties actually mean. 
+We also replace the statistics in the former Table 1, which is the current Table 2, with statistics appropriate to the vMF distribution.
+\item Instead of getting our list of Hilda asteroids from the Minor Planet Center and using the \citet{nesvorny2015identification} list of asteroid families, we now use the recently published list of Hilda group asteroids from \citet{vokrouhlicky2025orbital}.
+The older list identified only the Hilda and Schubart collisional families, while the newer list identifies four more families, the largest of which is the Potomac family.
+\item We no longer verify the libration status of each asteroid, because the list from \citet{vokrouhlicky2025orbital} provides the dynamically identified Hildas.
+\item Our previous magnitude restriction of $H\leq15.7$ came from an observational completeness estimate by \citet{hendler2020observational} for the Hilda group known at that time, but now we apply Python code from \citet{hendler2020observational} to obtain an updated observational completeness limit of $H\leq16.3$ for the Hilda group. This roughly doubles our sample size.
+\item We have significantly revised the former Figure 2, which is the current Figure 3, to make it easier to see the various reference planes and how they relate to the uncertainty intervals for the sample mean planes of the Hilda group and the collisional families. We have also refined the the former Figure 1, now  Figure 2a alongside Figure 2b, to show the $(a,e,i)$ distribution of the Hilda group and the collisional families.
+\item We have replaced discussion of the background objects with discussion of the entire Hilda group. %, as the background objects themselves are not a well defined dynamical category.
+\item We have split the former Section 4 into the current Section 4 and Section 5, to more clearly distinguish between an introduction to the Hilda asteroids and a discussion of their present-day mean plane. The former Section 5 is now Section 6, and it has been condensed and simplified.
+%\item We have replaced the former Figures 3 and 4 with the current Figures 4 and 5 and the first three columns of the current Table 3. This separates distinct plot traces into distinct subplots for greater readability. More importantly, it replaces the high-level observation that the difference in $q$ between the sample mean plane and the linear secular forced plane mostly appears to remain within the 95\% uncertainty boundaries (and the difference between the invariable plane and the forced plane does not) with a quantitative estimate for how much time the forced plane and the invariable plane spent outside the vMF 95\% uncertainty region for the sample mean plane. We still have no way to define how much time outside is too much, but at least we can quantify how much time is spent outside.
+%\item We have added the current Figures 6 and 7 and the right halves of the current Tables 2 and 3 in an attempt to distinguish the current statistical plausibility of a reference plane as the true mean plane (represented by vMF statistics) from the time-varying dynamical plausibility of a reference plane as the true forced plane around which a population's orbital planes will differentially precess to form a uniform ring.
+%\item Because the linear secular forced plane and Jupiter plane spend more time outside the 95\% uncertainty region for the sample mean plane than we had guessed at a glance, and because we have no well-formed criterion for how long is too long, we no longer conclude that the mean plane tracks the forced plane and the Jupiter plane to within statistical precision. Instead we state the weaker conclusion that it is much less implausible to identify the true mean plane with the forced plane than it is to identify it with the invariable plane, which we still reject as the true mean plane.
+\end{itemize}
+Point-by-point responses to each of the reviewers’ comments are given below.
+\end{reply}
+
+% Let's start point-by-point with Reviewer 1
+\reviewersection
+
+This paper investigates the forced orbit plane of Hilda asteroids that librate in Jupiter's interior 3:2 mean motion resonance. The authors measure the mean planes of three Hilda subgroups (Hilda family, Schubart family, and background objects) and demonstrate that, despite being in resonance, these asteroids follow the local instantaneous Laplace plane as predicted by the Laplace-Lagrange linear secular theory. This finding is notable as this theory is conventionally considered inapplicable within mean motion resonances. Their measurements confirm that the mean planes of all Hilda subgroups are statistically indistinguishable from each other and from the predicted Laplace plane.
+
+I believe this work should be published if the authors can address the following issues. Below are my comments:
+
+1) The authors discovered the interesting dynamical behavior that resonant Hilda asteroids follow the Laplace plane given by linear secular theory. This is quite surprising, but the authors have not provided a clear explanation for this phenomenon. Given that Hilda asteroids are dominated by Jupiter's gravity, as evidenced by the Laplace plane being so close to Jupiter's orbital plane, I suspect the explanation may be that the nominal precession rate $B$ is so large for Hilda asteroids and nearby non-resonant asteroids that the resonance itself does not significantly alter the forced plane. It would be helpful if the authors could report: 1) the precession rate of a Hilda asteroid, and 2) the precession rate of a nearby non-resonant asteroid, and compare these against the eigenfrequencies of the Solar System. If my understanding of this problem is correct, this should lead to an explanation of why Hilda asteroids, despite being in a mean motion resonance, follow the Laplace plane.
+
+\begin{reply}
+As we discussed in the Introduction section, in the absence of a theory for the forced plane of resonant minor planets we used the statistically significant population of known resonant asteroids (the Hildas) to measure their mean plane from their orbital data. 
+That is to say, we look to nature to tell us. 
+At this time, we would like to share this result from data analysis, leaving a “clear explanation” to a future theoretical analysis. 
+The reviewer’s comment stimulated us to add the following to the discussion section:
+``Because the Hilda group is in closer proximity to Jupiter and the other giant planets are much farther away and of lower mass, the dynamical environment can be closely approximated by the restricted three-body problem with the Sun, Jupiter, and a massless test particle.
+In the restricted three-body problem, the instantaneous forced plane is expected to be identical to the Jupiter plane; there is no other preferred plane around which a massless small body's orbital plane can precess.
+In the less restricted problem with additional planets on non-coplanar orbits, there are four possible hypotheses for the forced plane: the invariable plane, Jupiter's orbital plane (if Jupiter dominantly controls the dynamics of the resonant population), the Laplace forced plane, or one that is distinct from all of these if the mean motion resonance strongly affects the forced plane dynamics of resonant populations.
+Our results rule out the invariable plane as the forced plane of the Hilda group at high statistical confidence.
+However, the present-day observationally complete sample size cannot distinguish between the second and third of these hypotheses for three reasons: the size of the sample, its significant inclination dispersion, and the nearness of the Laplace plane to the Jupiter plane.''
+
+%\textcolor{red}{
+%Regarding the precession rates of a Hilda asteroid and a nearby non-resonant asteroid, let us take $2\pi/B$ as the secular precession timescale, where $B$ is computed in Murray \& Dermott 1999, equation 7.143.
+%For our nearby non-resonant asteroid, we take asteroid 2021 QH120, which has low heliocentric inclination (4.05 degrees) and low heliocentric eccentricity (0.07).
+%Its heliocentric semimajor axis is 3.79 au, just below the Hilda region.
+%The secular precession timescale for 2021 QH120 is 39.3 kyr, vs 29.2 kyr for asteroids Potomac, Hilda, Schubart, and Ismene.
+%}
+
+%\textcolor{red}{Alternatively, when we plot the free longitudes of node for 2021 QH120, Potomac, Hilda, Schubart, and Ismene relative to their instantaneous local Laplace planes, we find respective precession periods of 6.3 kyr, 24.7 kyr, 20.9 kyr, 18.1 kyr, and 20.9 kyr.}
+
+%\st{We agree that we have not provided a clear explanation for this phenomenon. We are not sure what the explanation is, but, like the reviewer, we suspect it lies in the close proximity of the Laplace plane to the Jupiter plane for these asteroids. We will calculate and report the precession rate of a Hilda asteroid and the precession rate of a nearby non-resonant asteroid and compare them to the eigenfrequencies of the Solar System in our revised manuscript.}
+
+%{\bf I think we have (rough) estimates of the precession rates (e.g., of asteroid Hilda and asteroid Schubart) as well as of the Laplace plane, so these timescales can be stated. RM needs to review this again.}
+
+\end{reply}
+
+2) How were the Hilda and Schubart collisional families identified in previous works? If the identification involved comparing the free inclination of potential members, then they would naturally form rings with the forced pole as the center (as shown in Figure 1). In that case, what is the significance of comparing the mean planes of these collisional families with the Laplace plane, if they were identified using the Laplace plane as a reference? The authors need to provide better justification for this analysis.
+
+\begin{reply}
+We use the asteroid families identified by \citet{vokrouhlicky2025orbital}.
+These are found (by those authors) by numerically computing proper elements and then applying a hierarchical cluster-finding method in proper $a$, $e$, and $i$.
+The proper elements are computed by averaging osculating elements over 10 yr, constructing mean resonant elements over 10 kyr, and then averaging the mean resonant elements over 10 Myr.
+The asteroid families are not identified by finding rings in osculating $q$ and $p$ using the forced plane as a reference.
+%, and the proper elements are not computed as the forced elements from linear secular theory.
+Therefore, there is no circular reasoning inherent in computing the sample mean planes of the collisional families, as the reviewer's question suggests there might be.
+%Asteroid families are generally identified by applying cluster-finding algorithms to proper elements in (a,e,i) space. These proper elements are computed from numerically propagated orbits, removing short-period oscillations from osculating elements using either numerical Fourier analysis or analytic perturbation theory \edit{[I wonder if the analytic perturbation theory is still used, or if the current state of the art is just the Fourier analysis? If the latter, then we can remove reference to the "analytic perturbation theory".--RM]}. They are not identified by finding rings in osculating (q,p) space using the Laplace plane as a reference. Therefore, we think there is no need to further justify our use of existing databases of collisional families.
+\end{reply}
+
+3) For the background objects, simple arithmetic mean values are provided. I'm wondering why the authors didn't fit the background objects with the von-Mises distribution, a method they used in their previous works on Plutinos (Matheson et al. 2023).
+
+\begin{reply}
+Previously we avoided the use the von Mises distribution for two reasons.
+Firstly, the Hilda, Schubart and Potomac families present as annuli in the (q,p) plane, whereas the von Mises distribution is not an annular distribution (it is circularly symmetric and its density decreases monotonically with increasing angular distance from the mean direction). 
+%we were not sure that their mean plane uncertainty regions would accurately represent the uncertainty in the mean plane of an annulus. 
+Secondly, we wanted to allow for an elliptical shape of the uncertainty region for the mean plane of the background population, in parallel to the circle-fit mean plane uncertainty regions in the (q,p) plane that we previously used for the Hilda and Schubart families.
+
+However, with some numerical experimentation we are now persuaded that the von Mises distribution accurately estimates the prescribed level of uncertainty of the mean plane for annular populations as well as it does for disc-like populations with dense centers, as long as they are rotationally uniform around the mean plane. 
+Because the observed Potomac, Hilda, and Schubart families are reasonably evenly distributed in their free longitudes of ascending node with respect to their vMF mean planes, we can straightforwardly apply the statistical calculations to all the observed families and make valid like-to-like comparisons between their mean plane uncertainty regions.
+%Furthermore, extending the integration time for the propagated clones allows them to differentially precess enough to fill entire annuli uniformly in $q$ and $p$, so we now use vMF statistics for the clones too.
+%This lets us entirely remove circle-fit statistics from the paper, which is an improvement because we didn't understand them as well as we understand vMF statistics.
+%We have revised section 4 accordingly.
+%In section 5, we continue to use circle-fit statistics for the mean planes of the collisional Hilda, Schubart and Potomac clones. 
+%This is because the propagated clones differentially precess rather slowly, forming only circular arcs that do not fill entire annuli uniformly enough in the $(q,p)$ plane (over our limited numerical propagation time); 
+%this precludes the use of von Mises statistics.
+\end{reply}
+
+4) Section 5.1. To convince readers that individual objects follow the Laplace Plane, it would be more natural and easier to understand if the authors simply demonstrated the conservation of free inclination for individual Hilda objects (as shown in Figure 2 of Huang et al., 2022). The authors' method is valid but perhaps unnecessarily complex for this purpose.
+
+\begin{reply}
+We respectfully submit that our method is appropriate for the following reasons.
+The conservation of free inclination is neither a necessary nor a sufficient condition to demonstrate that an individual object follows the Laplace plane over time.
+For non-resonant Kuiper belt objects, Huang et al (2022) found that the ``free inclination'' measured relative to the Laplace plane shows significant variations, with {deviations of more than ten degrees over a period of about 2 Myr.}
+To find a constant free inclination, Huang et al. (2022) carried out a more complex calculation by employing a double-averaged Hamiltonian model.
+Their approach calculates the conserved quantities that they  call ``free inclinations''.
+Notably, their approach does not aim to identify the mean plane of groups of objects nor the forced plane for individual objects; indeed Huang et al.~do not report any measurements of the mean or forced planes, so we cannot know that the reported ``free inclination'' is actually relative to the Laplace plane or a conserved quantity that bears a more complicated relationship to the Laplace plane.
+In some contrast with Huang et al., we note that Volk \& Malhotra (2017) and Matheson \& Malhotra (2023) found that the mean planes of (non-resonant) objects in various semimajor axis intervals of the Kuiper belt are statistically compatible with treating the instantaneous Laplace plane as the true mean plane.
+In the former section 5.1, we employed a relatively straightforward approach that aims to elucidate the dynamics of the forced plane of three individual Hilda group asteroids by using clones to examine the time evolution of their orbit planes; we do not address the question of conserved quantities such as ``free inclinations'' as defined in Huang et al. 
+The discussion of the mean planes of the clones is now in section 6.
+\end{reply}
+
+5) Section 5.2. If individual objects track the Laplace Plane, then group mean planes would naturally track the Laplace Plane as well. In my opinion, it would be more straightforward to demonstrate this by showing the conservation of free inclinations for the group of Hilda objects.
+
+\begin{reply}
+The reviewer makes a simple intuitive point, but please see our response to the previous comment.
+By presenting the mean-plane statistics of the observed collisional families in the Hilda group, we test intuition with observational data.
+Due to the lack of theory for the expected mean plane of a resonant population, we used the most intuitively plausible expectation (the Laplace plane or Jupiter’s plane or the invariable plane) as a foil for our observational data-based analysis of the present-day mean plane.
+
+%The reviewer makes a simple intuitive point, but my (IM) intuition is not strong enough to accept the point without mathematical proof or convincing numerical simulation. We attempted to show the point through simulation, but we should also make the point through a proof. We could also plot the time series of the inclinations of the observed Hildas relative to their computed mean planes, and relative to the Laplace plane, but doing so would introduce another statistical question: how constant is constant enough? How much variation in the free inclination is permitted before we reject the hypothesis that the free inclination relative to the fitted mean plane is constant? How much is permitted before we reject the hypothesis of constant free inclination relative to the Laplace plane? We thought it would be more straightforward to use the same statistical techniques to address the questions of individual objects tracking the Laplace plane and of groups tracking the Laplace plane, by using clones to create synthetic groups for selected individual objects.
+
+%Another point to consider is that by computing the mean planes of the collisional families at the present time, we are using observational data to test the expectation that the Laplace plane is the true mean plane. This is inherently a question about the collective dynamics of groups and cannot be entirely reduced to showing the conservation of free inclinations of individual objects in simulation.
+
+%{\bf [Consider the difference between theoretical expectation and testing that expectation with observational data.]}
+
+\end{reply}
+
+6) Line 25 is missing a comma after ``section 2''.
+
+\begin{reply}
+We've fixed that in the appropriate line of the revision.
+
+\end{reply}
+
+7) It would be nice to show Figure 1 and 2 side by side, with the scale of Figure 2 correctly marked on Figure 1. Figure 2 was confusing for me until I noticed that its plotting scale is different from Figure 1's.
+
+
+\begin{reply}
+In the revision, the former Figure 1 is now Figure 2b and the former Figure 2 is now Figure 3. We have added Figure 2a to give more information about the orbital elements of the Hilda group and we have expanded Figure 3 to make it more readable. We have added a note to the caption of Figure 3 to clarify that its scale is much smaller than the scale of Figure 2b, but we do not think it is necessary to impose an outline of Figure 3 on Figure 2b in order to communicate the relative scale.
+%\edit{[needs review/revision because the Figures have been revised --RM]}
+%We have added notes to the captions of Figure 1 and Figure 2 to call attention to the different scales.
+%We could format Figure 1 and Figure 2 as two subplots of the same figure in the revision, but we don't think it's necessary. Figure 2 is zoomed in so close to the origin, compared to Figure 1, that it would still be confusing at a glance even if they were directly side-by-side. We would rather have the two figures separate and leave it to the typesetting team at the journal to arrange them nicely within the final manuscript.
+\end{reply}
+
+% Begin a new reviewer section
+\reviewersection
+
+The paper endeavors to identify the forced orbital plane of the Hilda population of asteroids in the 3:2 resonance with Jupiter. Specifically, the authors test whether the forced orbital plane at ~4 au computed from the equations of Lagrange-Laplace secular theory tracks the evolution of the Hilda's mean plane. To compute the mean plane of the actual Hilda's, and simulated version of them, the paper makes use of Gaussian statistics and a least squares circle fit. The authors conclude that all 3 derived mean planes (those of 2 known collisional families in the population as well as the background objects) closely coincide with the instantaneous Laplace plane - which is computed via the Laplace-Lagrange equations using the osculated planet orbits at the current epoch - and Jupiter's orbital pole. The authors also perform a series of simulations of both the actual Hildas, as well as clones of individual objects, to show that the objects continue to follow both the Lagrange plane and Jupiter's pole forward in time. This result contradicts the common view that secular theory is not applicable inside of mean motion resonances. I think this is a novel, important addition to the literature, and merits publication in Icarus. The arguments are straightforward and the methodology is appropriate and correctly applied. I have a number of mostly minor comments. In particular, I think the authors should include a few more relevant references, make some modest improvements to the way in which the results are presented, and expand on the discussion of the implication of the results. Specific comments follow:
+
+1) I think the introduction should at least mention where the population is thought to have originated from (i.e. capture in the region after it was emptied by the instability: Franklin et al 2004; Vokrouhlicky et al. 2016), and what it is made up of (P- and D- types, see Dahlgren et al. 1997, Wong et al. 2017, Wong \& Brown 2017.). I think this context is important for a comprehensive interpretation of the results of this paper.
+
+\begin{reply}
+This is a reasonable suggestion. We have added a paragraph to the current Section 1 to provide this context.
+\end{reply}
+
+2) I suspect the authors submitted their paper before Vokrouhlicky et al. 2025 (https://ui.
+adsabs.harvard.edu/abs/2025arXiv250304403V/abstract) came on Arxiv. I think that a discussion of that paper, in particular its conclusions on the debiased orbital distribution of the Hildas and derived uncertainties (e.g. their figure 14 and table 2) needs to be added to the introduction and discussion sections of this paper.
+
+\begin{reply}
+The reviewer is correct that we submitted our paper before Vokrouhlicky et al 2025 was published. 
+Rather than adding a textual discussion of this paper as it relates to our results in the first manuscript submission, we decided to redo our calculations using the lists of Hilda-group asteroids and their collisional families that they provide in their Zenodo dataset. 
+By doing so, we now have collisional family lists that are up-to-date with the overall list of Hilda-group asteroids, thus implicitly incorporating their work on the debiased distribution of the Hildas.
+This means that our observational samples were revised and the mean plane estimates were also revised.
+\end{reply}
+
+3) Line 83: ``Accordngly''
+
+\begin{reply}
+We corrected this typo in the revision.
+\end{reply}
+
+4) Line 168: I feel like this first and second paragraphs here are a little distracting. The information itself is fine to include if you like, but isn't the point you want to make that the Hilda population represents the best (i.e most observationally constrained resonant populations) for your analysis? I think this section should lead off with this as a strong statement, and this point should also be made in the introduction as well.
+
+\begin{reply}
+%We feel that the information in these paragraphs is necessary to justify our choice of the Hilda group as our sample population. 
+We did make this point in the current Section 1, to wit:
+``The Hilda asteroids, librating in Jupiter’s interior 2:3 MMR, represent a statistically significant sample of nearly 4000 objects which is observationally complete to $H\leq16.3$, so we can use them as a test case to investigate their mean orbital plane while limiting our uncertainties to those inherent in the sample statistics without concern for observational survey biases.''
+However, we can see how we buried the lede in this section, so we rewrote the first two paragraphs of the current Section 4 to lead off with a strong statement, as suggested.
+\end{reply}
+
+5) Line 185: What is the timescale for turning an arc into a circle in the Hilda region? I'd suspect fairly short. A quick back-of-the-envelope estimate would be useful here, or something derived from the simulations in section 5.
+
+\begin{reply}
+The timescale for turning an arc into a circle depends inversely on the initial semimajor axis dispersion (assuming a very small dispersion, typical of collisional families). For an initial dispersion of $\pm0.01$ au, we determined from our integrations of Potomac, Hilda, Schubart, and Ismene clones that this timescale for Hilda-group asteroids is several hundred kyr to about 1 Myr. We have added text at the end of the current Section 4 to address this point.
+\end{reply}
+
+6) Line 187: I think you should at least cite Broz \& Vokrouhlicky 2011 here, who identified the Hilda group as containing 2 families. Schubart 1982 and 1991 are relevant as well.
+
+\begin{reply}
+We have added references to these three papers at this point in the manuscript (the second paragraph of the current Section 4).
+\end{reply}
+
+7) Figure 1: I think a little more context in the first figure would help the paper. Perhaps an additional panel showing proper a vs. inc of the Hilda region with 5 colors: All background objects in the region, Hildas discarded from analysis in this paper (3) Background Hildas used in this paper, (4-5) Hilda and Schubart family members used in this paper. The authors can feel free to take or leave my suggestion.
+
+\begin{reply}
+With the revised \citet{vokrouhlicky2025orbital} dataset, the number of circulating objects in our calculations was small and excluding them resulted in negligible changes to the mean plane and mean plane calculations.
+Accordingly, we do not discuss checking the 3:2 resonant angle in the revision.
+As suggested by the reviewer, we have added a set of scatter plots of the orbital elements, $a,e,i$, as the current Figure 2a.
+We plot osculating heliocentric elements, as these are pertinent to our investigation of the mean plane.
+The $(a,i)$ plot shows that the semimajor axes of the collisional families are randomly distributed across their ranges, and the $(a,e)$ plot shows that semimajor axis and eccentricity are uncorrelated. 
+%In the revised manuscript, we do not distinguish between librating and circulating objects, because we found that the number of circulating objects in our integrations was small and excluding them resulted in negligible changes to the mean plane and mean plane uncertainty calculations.
+%\edit{[This seems too long a response, not quite commensurate with the reviewer's comment. Perhaps most of this belongs in the manuscript, and only 1-2 sentences in the response. Let's discuss it. --RM]} In our new integrations, we began with the new Vokrouhlicky+2025 list of 6392 Hilda-group asteroids of all absolute magnitudes, with the following collisional families identified among them: Potomac, Hilda, Schubart, Francette, Guinevere, and 2008 TG106.
+%We call asteroids not identified as members of any collisional family ``background'' objects.
+%Because 16 of the 17 members of the 2008 TG106 family were also identified as members of the Schubart family, we reassigned the 17th member of the 2008 TG106 family to the ``background'' category and did no calculations specific to the 2008 TG106 family.
+%We integrated all 6392 asteroids for 2 Myr as massless particles perturbed by the massive outer planets, and labeled each of these by eye as ``librating'', ``maybe'', or ``circulating'' in Jupiter's interior 3:2 MMR.
+%We abbreviate the categories as B, P, H, S, F, and G, and we abbreviate the labels as L, M, and C.
+%Thus, we abbreviate ``Potomacs, librating'' as ``P\_L'' and we abbreviate ``Backgrounds, Francettes, and Guineveres, librating and maybe'' as ``BFG\_LM''.
+%The number of objects brighter than the absolute magnitude observational completeness cutoff $H<15.7$ is shown in Table \ref{tab:category_counts}:
+%\begin{table}
+%    \centering
+%    \begin{tabular}{lrrrrrrr}
+%        & P   & H   & S   & B    & BFG  & BPHS & BPHSFG \\
+%    L   & 200 & 485 & 439 & 1056 & 1071 & 2180 & 2195 \\
+%    LM  & 200 & 485 & 439 & 1085 & 1100 & 2209 & 2224 \\
+%    LMC & 200 & 485 & 439 & 1118 & 1133 & 2242 & 2257\\
+%    \end{tabular}
+%    \caption{Category counts in revised integrations}
+%    \label{tab:category_counts}
+%\end{table}
+%Thus, we found no circulating collisional Potomacs, Hildas, or Schubarts, and only small numbers of circulating background objects or circulating objects in other families.
+%Here BFG is an expanded background category including the Francette and Guinevere families, BPHSFG is the entire list of Hilda-group asteroids, and BPHS is a reduced list neglecting the Francette and Guinevere families.
+%We computed the mean plane and its uncertainty region using vMF statistics for each category in Table \ref{tab:category_counts}.
+%The results for B\_L, B\_LM, B\_LMC, BFG\_L, BFG\_LM, and BFG\_LMC were negligibly different from each other.
+%The results for BPHS\_L, BPHS\_LM, BPHS\_LMC, BPHSFG\_L, BPHSFG\_LM, and BPHSFG\_LMC were also negligibly different from each other.
+%Because including circulating and ``maybe'' objects, and including the Francette and Guinevere families, makes a negligible difference in the statistical results, in the body of the revised paper we only report the results for BFG\_LMC and BPHSFG\_LMC as ``background'' and ``all''.
+%This choice is intended to keep the paper relatively short, as we don't have to talk about verifying libration status and discarding circulating objects, and it tidily divides the Vokrouhlicky+2025 list into the categories of ``Potomac'', ``Hilda'', ``Schubart'', and ``everything else.''
+\end{reply}
+
+8) Section 4: I think the last two paragraphs should be flipped.
+
+\begin{reply}
+%\edit{[is this response still valid, after the revisions? --RM]}
+%We accepted the suggestion and switched the order of the last two paragraphs in Section 4.
+The location of that content in the revised paper is at the end of Section 5.
+We did not flip the order of the last two paragraphs in the revision, because the discussion of the statistical overlap of various mean planes follows naturally from the immediately preceding presentation of what the subplots of Figure 3 represent.
+The numerical value of the mean plane of the entire Hilda group is then presented in the concluding paragraph of section 5.
+%in conjunction with the Rayleigh $p$-values for rotational uniformity.
+This complements the discussion of the uncertainty region half-angles in the preceding paragraph.
+\end{reply}
+
+9) End of Section 5.1: It would also be useful to remind the reader here that the instantaneous Laplace plane is calculated with the simulated osculating elements of the planets. So, the calculation here uses just the giant planets, correct? Whereas the calculation in section 4 uses all 8 presumably? Not that it would matter, I just think it's worth clarifying.
+
+\begin{reply}
+We now state explicitly in section 2 that we always calculate the Laplace plane using the instantaneous heliocentric osculating orbital elements of only the outer planets Jupiter, Saturn, Uranus, and Neptune.
+\end{reply}
+
+10) Section 5.2: I was confused when I started reading this it seemed like you were still talking about the clones. It might help to just say that these are the "actual" objects in the first sentence.
+
+\begin{reply}
+We hope the revised discussion of this content in the current Section 6 is more clear.
+%In the first two sentences of Section 5.2, we have replaced the phrases "massless collisional Hildas", "collisional Schubarts", and "background Hildas" with "observed Hilda family", "observed Schubart family", and "observed background Hildas".
+\end{reply}
+
+11) Figure 3: Similarly, it would help if rows 1\&2 were flipped with 3\&4, as they come first in the text, alternatively, you could just add something like "top 2 rows" and "bottom 2 rows" to the in-text citation to figure 3 in 5.1 and 5.2.
+
+\begin{reply}
+We've altered Figure 3 to be more readable and we've added clarifying language to the in-text citations.
+%The former Figure 3 has been replaced with the current Figures 4 and 5, which are discussed sequentially in the current section 6.
+%We've added clarifying language in the in-text citations to Figure 3 in Sections 5.1 and 5.2.
+\end{reply}
+
+12) Conclusions: The result here is indeed surprising. I understand that the authors plan to continue to explore this topic in future work, but I do feel that a bit more could be said in this paper. In particular, it would be useful for the authors to comment on whether this outcome would be universally applicable to any resonant population of small bodies (or rather, why it is not), a result of something specific to the Hilda populations' particular orbital distribution, or something specific to the resonance itself. I would be curious if the author's results would change, and if so by how much, if, for example, they altered the underlying inclination distribution of the Hildas, or if they created a synthetic population of resonators in a different resonance.
+
+\begin{reply}
+The fifth paragraph in the revised Section 7 is a qualitative explanation for our result, but it is specific to the Hilda group as a population in an environment very closely approximated by the restricted three-body problem and may not generalize to other mean motion resonances.
+The last two paragraphs in Section 7 discuss what we see as the main weaknesses in our study and the most promising avenues of future study on the topic of the forced planes of resonant small-body populations.
+%We have added text in section 6 to expand on this point.
+%We badly need more theory and more simulations regarding the broader applicability of this result, but in the absence (for now) of more theory and more simulation we would like to share this first result without delay.
+%We are working on another paper to investigate the results more deeply with synthetic populations, such as how the results would change for different arrangements of the perturbing planets and for different resonances.
+\end{reply}
+
+13) Section 7: The GitHub link did not work for me.
+
+\begin{reply}
+We hadn't put anything up on GitHub at the time we submitted our manuscript (as noted previously). 
+With this revision, we have now uploaded our Python scripts and pertinent data files to GitHub, as noted in the revised Data Availability statement.
+\end{reply}
+
+Very interesting work.
+
+Best wishes,
+
+Matt Clement
+
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+\bibliographystyle{cas-model2-names}
+
+% Loading bibliography database
+\bibliography{refs_for_icarus}
+
+\end{document}
